@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
+/* Light / Dark Mode base colors */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111111;
+
+  --brand: #facc15; /* Yellow highlight (Search button, accents) */
+  --brand-dark: #eab308;
+
+  --muted: #6b7280;
+  --muted-light: #9ca3af;
 }
 
 @theme inline {
+  /* Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-muted: var(--muted);
+
+  /* Typography */
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Clash Display", "Poppins", sans-serif;
+
+  /* Radii + shadows */
+  --radius-lg: 1.25rem;
+  --shadow-soft: 0 10px 25px -5px rgba(0,0,0,0.08),
+                 0 8px 10px -6px rgba(0,0,0,0.05);
+  --shadow-hover: 0 12px 30px -6px rgba(0,0,0,0.12),
+                  0 10px 15px -6px rgba(0,0,0,0.08);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #f5f5f5;
+
+    --brand: #facc15; /* Keep brand punchy */
+    --brand-dark: #ca8a04;
+
+    --muted: #9ca3af;
   }
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Card style */
+.card {
+  @apply bg-white/80 dark:bg-neutral-900/80 rounded-3xl border border-black/5 shadow-soft transition hover:shadow-hover backdrop-blur-xl;
+}
+
+/* Interactive lift */
+.lift {
+  transform: translateY(0);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.lift:hover {
+  transform: translateY(-8px);
+}
+
+/* Buttons */
+.btn {
+  @apply inline-flex items-center justify-center px-6 py-3 font-semibold rounded-2xl transition-transform;
+}
+.btn-brand {
+  background: var(--brand);
+  color: #111;
+}
+.btn-brand:hover {
+  background: var(--brand-dark);
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
