@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 export default function RegisterPage() {
@@ -42,7 +43,8 @@ export default function RegisterPage() {
             name="fullName"
             placeholder="Enter your full name"
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+            className="w-full px-4 py-3 rounded-xl text-white border border-gray-300 
+                       focus:ring-2 focus:ring-yellow-400 focus:outline-none placeholder-gray-400"
           />
         </div>
         <div>
@@ -52,7 +54,8 @@ export default function RegisterPage() {
             name="phone"
             placeholder="+91 9876543210"
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+            className="w-full px-4 py-3 rounded-xl text-white border border-gray-300 
+                       focus:ring-2 focus:ring-yellow-400 focus:outline-none placeholder-gray-400"
           />
         </div>
 
@@ -65,7 +68,8 @@ export default function RegisterPage() {
               name={field.toLowerCase()}
               placeholder={`Enter ${field} details`}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              className="w-full px-4 py-3 rounded-xl text-white border border-gray-300 
+                         focus:ring-2 focus:ring-yellow-400 focus:outline-none placeholder-gray-400"
             />
           </div>
         ))}
@@ -76,20 +80,50 @@ export default function RegisterPage() {
           <select
             name="service"
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+            className="w-full px-4 py-3 rounded-xl text-white border border-gray-300 
+                       focus:ring-2 focus:ring-yellow-400 focus:outline-none"
           >
-            <option value="">Select your service</option>
-            <option value="Plumber">Plumber</option>
-            <option value="Electrician">Electrician</option>
-            <option value="Teacher">Teacher</option>
-            <option value="Carpenter">Carpenter</option>
-            <option value="Makeup Artist">Makeup Artist</option>
-            <option value="Other">Other</option>
+            <option className="bg-black text-white" value="">
+              Select your service
+            </option>
+            <option className="bg-black text-white" value="Plumber">
+              Plumber
+            </option>
+            <option className="bg-black text-white" value="Electrician">
+              Electrician
+            </option>
+            <option className="bg-black text-white" value="Teacher">
+              Teacher
+            </option>
+            <option className="bg-black text-white" value="Carpenter">
+              Carpenter
+            </option>
+            <option className="bg-black text-white" value="Makeup Artist">
+              Makeup Artist
+            </option>
+            <option className="bg-black text-white" value="Other">
+              Other
+            </option>
           </select>
         </div>
 
+        {/* If Other is selected → show custom service input */}
+        {form.service === "Other" && (
+          <div>
+            <label className="block mb-2 font-semibold">Specify Service</label>
+            <input
+              type="text"
+              name="customService"
+              placeholder="Enter your service name"
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl text-white border border-gray-300 
+                         focus:ring-2 focus:ring-yellow-400 focus:outline-none placeholder-gray-400"
+            />
+          </div>
+        )}
+
         {/* Extra Details */}
-        {[
+        {/* {[
           "Mother",
           "Brother",
           "Sister",
@@ -104,10 +138,11 @@ export default function RegisterPage() {
               name={field.toLowerCase()}
               placeholder={`Enter ${field}`}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              className="w-full px-4 py-3 rounded-xl text-white border border-gray-300 
+                         focus:ring-2 focus:ring-yellow-400 focus:outline-none placeholder-gray-400"
             />
           </div>
-        ))}
+        ))} */}
 
         {/* Social Media */}
         {["Website", "Instagram", "Facebook"].map((field) => (
@@ -118,7 +153,8 @@ export default function RegisterPage() {
               name={field.toLowerCase()}
               placeholder={`Enter ${field} URL`}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              className="w-full px-4 py-3 rounded-xl text-white border border-gray-300 
+                         focus:ring-2 focus:ring-yellow-400 focus:outline-none placeholder-gray-400"
             />
           </div>
         ))}
@@ -130,12 +166,14 @@ export default function RegisterPage() {
             type="file"
             name="profilePhoto"
             onChange={handleChange}
-            className="w-full p-3 rounded-xl bg-white text-black border border-gray-300"
+            className="w-full p-3 rounded-xl bg-black text-white border border-gray-300"
           />
           {previewPhoto && (
-            <img
+            <Image
               src={previewPhoto}
               alt="Preview"
+              width={112}
+              height={112}
               className="mt-3 w-28 h-28 rounded-full object-cover border-2 border-yellow-400"
             />
           )}
@@ -150,14 +188,15 @@ export default function RegisterPage() {
             type="file"
             name="servicePhoto"
             onChange={handleChange}
-            className="w-full p-3 rounded-xl bg-white text-black border border-gray-300"
+            className="w-full p-3 rounded-xl bg-black text-white border border-gray-300"
           />
         </div>
 
         {/* Submit */}
         <button
           type="submit"
-          className="col-span-2 mt-6 bg-yellow-400 text-black px-8 py-4 rounded-2xl font-bold hover:bg-yellow-500 transition transform hover:scale-105"
+          className="col-span-2 mt-6 bg-yellow-400 text-white px-8 py-4 rounded-2xl font-bold 
+                     hover:bg-yellow-500 transition transform hover:scale-105"
         >
           Submit
         </button>
