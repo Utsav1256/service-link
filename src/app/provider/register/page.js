@@ -10,7 +10,9 @@ export default function RegisterPage() {
     if (e.target.type === "file") {
       const file = e.target.files[0];
       setForm({ ...form, [e.target.name]: file });
-      setPreviewPhoto(URL.createObjectURL(file));
+      if (e.target.name === "profilePhoto") {
+        setPreviewPhoto(URL.createObjectURL(file));
+      }
     } else {
       setForm({ ...form, [e.target.name]: e.target.value });
     }
@@ -19,40 +21,106 @@ export default function RegisterPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Provider registered:", form);
+    // TODO: send to API
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-12">
-      <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-10">
+    <div className="min-h-screen w-full max-w-5xl mx-auto py-16 px-6 bg-[#0d0d0d] text-white pt-28">
+      <h2 className="text-4xl font-extrabold text-center uppercase tracking-wider mb-12">
         Register as a Service Provider
       </h2>
+
       <form
         onSubmit={handleSubmit}
-        className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 grid grid-cols-1 md:grid-cols-2 gap-6"
+        className="bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl p-10 grid grid-cols-1 md:grid-cols-2 gap-6 border border-white/10"
       >
+        {/* Basic Info */}
+        <div>
+          <label className="block mb-2 font-semibold">Full Name</label>
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Enter your full name"
+            onChange={handleChange}
+            className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label className="block mb-2 font-semibold">Phone Number</label>
+          <input
+            type="tel"
+            name="phone"
+            placeholder="+91 9876543210"
+            onChange={handleChange}
+            className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+          />
+        </div>
+
+        {/* Address */}
+        {["Home", "Shop", "Office", "S/O"].map((field) => (
+          <div key={field}>
+            <label className="block mb-2 font-semibold">{field} Address</label>
+            <input
+              type="text"
+              name={field.toLowerCase()}
+              placeholder={`Enter ${field} details`}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+            />
+          </div>
+        ))}
+
+        {/* Service Type */}
+        <div>
+          <label className="block mb-2 font-semibold">Service Type</label>
+          <select
+            name="service"
+            onChange={handleChange}
+            className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+          >
+            <option value="">Select your service</option>
+            <option value="Plumber">Plumber</option>
+            <option value="Electrician">Electrician</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Carpenter">Carpenter</option>
+            <option value="Makeup Artist">Makeup Artist</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        {/* Extra Details */}
         {[
-          "Home",
-          "Shop",
-          "Office",
-          "S/O",
           "Mother",
           "Brother",
           "Sister",
           "Experience",
           "Earning",
           "Qualification",
-          "Website",
-          "Instagram",
-          "Facebook",
         ].map((field) => (
-          <input
-            key={field}
-            type="text"
-            name={field.toLowerCase()}
-            placeholder={field}
-            onChange={handleChange}
-            className="px-4 py-3 rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
+          <div key={field}>
+            <label className="block mb-2 font-semibold">{field}</label>
+            <input
+              type="text"
+              name={field.toLowerCase()}
+              placeholder={`Enter ${field}`}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+            />
+          </div>
+        ))}
+
+        {/* Social Media */}
+        {["Website", "Instagram", "Facebook"].map((field) => (
+          <div key={field}>
+            <label className="block mb-2 font-semibold">{field}</label>
+            <input
+              type="url"
+              name={field.toLowerCase()}
+              placeholder={`Enter ${field} URL`}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl text-black border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+            />
+          </div>
         ))}
 
         {/* Profile Photo */}
@@ -62,31 +130,34 @@ export default function RegisterPage() {
             type="file"
             name="profilePhoto"
             onChange={handleChange}
-            className="w-full p-3 border rounded-xl"
+            className="w-full p-3 rounded-xl bg-white text-black border border-gray-300"
           />
           {previewPhoto && (
             <img
               src={previewPhoto}
               alt="Preview"
-              className="mt-3 w-28 h-28 rounded-full object-cover"
+              className="mt-3 w-28 h-28 rounded-full object-cover border-2 border-yellow-400"
             />
           )}
         </div>
 
         {/* Service Photo */}
         <div className="col-span-2">
-          <label className="block mb-2 font-semibold">Service Related Photo</label>
+          <label className="block mb-2 font-semibold">
+            Service Related Photo
+          </label>
           <input
             type="file"
             name="servicePhoto"
             onChange={handleChange}
-            className="w-full p-3 border rounded-xl"
+            className="w-full p-3 rounded-xl bg-white text-black border border-gray-300"
           />
         </div>
 
+        {/* Submit */}
         <button
           type="submit"
-          className="col-span-2 mt-6 bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-blue-700 transition transform hover:scale-105"
+          className="col-span-2 mt-6 bg-yellow-400 text-black px-8 py-4 rounded-2xl font-bold hover:bg-yellow-500 transition transform hover:scale-105"
         >
           Submit
         </button>

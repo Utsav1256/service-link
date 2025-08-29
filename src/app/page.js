@@ -61,37 +61,6 @@ export default function HomePage() {
 
   return (
     <div className="relative min-h-screen bg-[#0a0a0a] text-white font-sans antialiased">
-      {/* ==================== HEADER ==================== */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl font-black tracking-wider uppercase">
-              ServiceLink
-            </span>
-          </Link>
-          <nav className="hidden items-center gap-8 text-sm text-gray-300 md:flex">
-            <Link href="#providers" className="hover:text-white">
-              Providers
-            </Link>
-            <Link href="#how" className="hover:text-white">
-              How it works
-            </Link>
-            <Link href="#testimonials" className="hover:text-white">
-              Testimonials
-            </Link>
-            <Link href="#contact" className="hover:text-white">
-              Contact
-            </Link>
-          </nav>
-          <Link
-            href="/provider/register"
-            className="hidden rounded-xl bg-yellow-400 px-4 py-2 text-sm font-semibold text-black shadow md:inline-block"
-          >
-            Become a Provider
-          </Link>
-        </div>
-      </header>
-
       {/* ==================== HERO ==================== */}
       <section className="relative flex min-h-screen items-center justify-center">
         {/* Background image */}
