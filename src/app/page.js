@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import MagneticButton from "@/components/ui/MagneticButton";
 import ProviderCard from "@/components/ProviderCard";
@@ -39,10 +39,22 @@ const mockProviders = [
 export default function HomePage() {
   const [query, setQuery] = useState("");
   const [pincode, setPincode] = useState("");
+  const [providers, setProviders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [results, setResults] = useState([]);
 
+  const providersRef = useRef(null);
+
+  useEffect(() => {
+    fetch("/api/providers")
+      .then((res) => res.json())
+      .then((data) => setProviders(data))
+      .catch(() => setProviders([]))
+      .finally(() => setLoading(false));
+  }, []);
+
   const handleSearch = () => {
-    const filtered = mockProviders.filter(
+    const filtered = providers.filter(
       (p) =>
         (query
           ? p.service.toLowerCase().includes(query.toLowerCase())
@@ -52,18 +64,24 @@ export default function HomePage() {
           : true)
     );
     setResults(filtered);
+
+    // wait for React to update results, then scroll
+    setTimeout(() => {
+      if (providersRef.current) {
+        providersRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 50);
   };
 
   const list = useMemo(
-    () => (results.length ? results : mockProviders),
-    [results]
+    () => (results.length ? results : providers),
+    [results, providers]
   );
 
   return (
     <div className="relative min-h-screen bg-[#0a0a0a] text-white font-sans antialiased">
       {/* ==================== HERO ==================== */}
       <section className="relative flex min-h-screen items-center justify-center">
-        {/* Background image */}
         <Image
           src="/hero-sec.webp"
           alt="Local professionals in India"
@@ -72,10 +90,9 @@ export default function HomePage() {
           sizes="100vw"
           className="object-cover"
         />
-        {/* Overlays */}
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,10,0.3),rgba(10,10,10,0.75))]" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.08),transparent_60%)]" />
-        {/* Content */}
+
         <div className="relative z-10 mx-auto w-full max-w-4xl px-6 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 14 }}
@@ -160,31 +177,39 @@ export default function HomePage() {
       </section>
 
       {/* ==================== PROVIDERS ==================== */}
-      <section id="providers" className="mx-auto max-w-7xl px-6 py-8">
+      <section
+        ref={providersRef}
+        id="providers"
+        className="mx-auto max-w-7xl px-6 py-8"
+      >
         <Header
           eyebrow="Top Rated Nearby"
           title="Explore Providers"
           subtitle="Hand-picked professionals ready to help today."
         />
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
-        >
-          {list.map((provider, idx) => (
-            <motion.div
-              key={provider.id}
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.06 }}
-              className="rounded-2xl border border-white/10 bg-gradient-to-br from-zinc-900 to-zinc-800 shadow-2xl"
-            >
-              <ProviderCard provider={provider} index={idx} />
-            </motion.div>
-          ))}
-        </motion.div>
+        {loading ? (
+          <p className="mt-8 text-center text-gray-400">Loading providers...</p>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+          >
+            {list.map((provider, idx) => (
+              <motion.div
+                key={provider.id}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.06 }}
+                className="rounded-2xl border border-white/10 bg-gradient-to-br from-zinc-900 to-zinc-800 shadow-2xl"
+              >
+                <ProviderCard provider={provider} index={idx} />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </section>
 
       {/* ==================== HOW IT WORKS ==================== */}
